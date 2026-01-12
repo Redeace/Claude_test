@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium AI Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-purple: #8B5CF6;
+            --bg-dark: #0D0D0F;
+            --bg-card: #1A1A1F;
+            --bg-card-hover: #222228;
+            --text-white: #FFFFFF;
+            --text-gray: #9CA3AF;
+            --text-light-gray: #D1D5DB;
+            --border-color: #2D2D35;
+            --gradient-orange: linear-gradient(135deg, #FF6B35 0%, #FF8F65 100%);
+            --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Decorative lines */
+        .decorative-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .decorative-lines::before,
+        .decorative-lines::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+            transform: rotate(-15deg);
+        }
+
+        .decorative-lines::before {
+            top: 20%;
+            left: -50%;
+        }
+
+        .decorative-lines::after {
+            bottom: 30%;
+            left: -50%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, #1A1A1F 0%, var(--bg-dark) 100%);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-text h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-white);
+        }
+
+        .header-text p {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .premium-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient-orange);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .premium-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .premium-btn:active {
+            transform: scale(0.98);
+        }
+
+        .discount-badge {
+            background: #FF3366;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .timer-block {
+            text-align: center;
+        }
+
+        .timer-value {
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            min-width: 45px;
+            display: inline-block;
+        }
+
+        .timer-label {
+            font-size: 10px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .timer-separator {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-gray);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--text-white);
+        }
+
+        /* Main Section */
+        .main-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .section-title h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: var(--text-gray);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .section-title p::before {
+            content: '✓';
+            color: #10B981;
+            font-weight: bold;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: start;
+        }
+
+        .pricing-left h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .pricing-left h3 span {
+            color: var(--primary-orange);
+        }
+
+        .pricing-left > p {
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        /* Token Toggle */
+        .token-toggle {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--bg-card);
+            padding: 12px 20px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .token-toggle:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-orange);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            left: 22px;
+        }
+
+        .toggle-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Pricing Plans */
+        .pricing-plans {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .plan-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plan-card:hover {
+            border-color: var(--primary-purple);
+            background: var(--bg-card-hover);
+        }
+
+        .plan-card.selected {
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+
+        .plan-card.popular {
+            border-color: var(--primary-purple);
+        }
+
+        .popular-badge {
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-purple);
+            padding: 4px 16px;
+            border-radius: 8px 8px 0 0;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .plan-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card.selected .plan-radio {
+            border-color: var(--primary-purple);
+        }
+
+        .plan-card.selected .plan-radio::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-purple);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .plan-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .plan-info .discount {
+            display: inline-block;
+            background: var(--primary-orange);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .plan-info .original-price {
+            color: var(--text-gray);
+            text-decoration: line-through;
+            font-size: 12px;
+        }
+
+        .plan-right {
+            text-align: right;
+        }
+
+        .plan-price {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .plan-price span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        .plan-period {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        /* Plan Features */
+        .plan-features {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .plan-feature svg {
+            width: 16px;
+            height: 16px;
+            color: var(--text-gray);
+        }
+
+        /* Continue Button */
+        .continue-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-orange);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .continue-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Terms */
+        .terms {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .terms a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* Payment Methods */
+        .payment-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .payment-info p {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 10px;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .payment-method {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            height: 35px;
+        }
+
+        .payment-method img {
+            height: 20px;
+            width: auto;
+        }
+
+        .payment-method.amex {
+            background: #006FCF;
+        }
+
+        /* Premium Benefits */
+        .premium-benefits h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .benefit-check {
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .benefit-check svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+        }
+
+        /* Featured In Section */
+        .featured-section {
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .featured-section h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .featured-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .featured-logo {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-gray);
+            font-style: italic;
+        }
+
+        .featured-logo:hover {
+            opacity: 1;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 60px 0;
+        }
+
+        .reviews-section h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .reviews-section h2 span {
+            color: var(--primary-orange);
+        }
+
+        .reviews-slider {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .reviews-slider::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .reviews-slider::-webkit-scrollbar-track {
+            background: var(--bg-card);
+            border-radius: 3px;
+        }
+
+        .reviews-slider::-webkit-scrollbar-thumb {
+            background: var(--primary-purple);
+            border-radius: 3px;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            min-width: 300px;
+            scroll-snap-align: start;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            border-color: var(--primary-purple);
+            transform: translateY(-5px);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .review-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .review-stars {
+            color: #FFD700;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .review-text {
+            color: var(--text-light-gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--primary-orange);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Users Section */
+        .users-section {
+            padding: 60px 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(139, 92, 246, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .users-section h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .user-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .user-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        }
+
+        .user-stars {
+            color: #FFD700;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .user-verified {
+            font-size: 12px;
+            color: #10B981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Center user card */
+        .users-grid .user-card:nth-child(1) {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .users-grid .user-card:nth-child(2) {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .users-grid .user-card:nth-child(3) {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .users-grid .user-card:nth-child(4) {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .users-grid .user-card:nth-child(5) {
+            grid-column: 4;
+            grid-row: 2;
+        }
+
+        .users-grid .user-card:nth-child(6) {
+            grid-column: 1;
+            grid-row: 3;
+        }
+
+        .users-grid .user-card:nth-child(7) {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .users-grid .user-card:nth-child(8) {
+            grid-column: 3;
+            grid-row: 3;
+        }
+
+        .users-grid .user-card:nth-child(9) {
+            grid-column: 4;
+            grid-row: 3;
+        }
+
+        .users-grid .user-card:nth-child(10) {
+            grid-column: 2;
+            grid-row: 4;
+        }
+
+        .users-grid .user-card:nth-child(11) {
+            grid-column: 3;
+            grid-row: 4;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .faq-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-purple);
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer p {
+            padding: 0 20px 18px;
+            color: var(--text-gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .faq-image {
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+        }
+
+        .faq-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Guarantee Section */
+        .guarantee-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .guarantee-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .guarantee-badge {
+            flex-shrink: 0;
+        }
+
+        .guarantee-badge-inner {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #FFD700;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .guarantee-badge-inner span:first-child {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .guarantee-badge-inner span:nth-child(2) {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .guarantee-badge-inner span:last-child {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .guarantee-text h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .guarantee-text p {
+            color: var(--text-gray);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .safe-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #10B981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .safe-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .safe-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 30px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-gray);
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 1024px) {
+            .pricing-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .premium-benefits {
+                order: -1;
+            }
+
+            .users-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .users-grid .user-card:nth-child(1) {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .users-grid .user-card:nth-child(2),
+            .users-grid .user-card:nth-child(3),
+            .users-grid .user-card:nth-child(4) {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .users-grid .user-card:nth-child(5),
+            .users-grid .user-card:nth-child(6),
+            .users-grid .user-card:nth-child(7) {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .users-grid .user-card:nth-child(8),
+            .users-grid .user-card:nth-child(9) {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .users-grid .user-card:nth-child(10),
+            .users-grid .user-card:nth-child(11) {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .faq-container {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-image {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .header-left {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title h1 {
+                font-size: 28px;
+            }
+
+            .pricing-left h3 {
+                font-size: 20px;
+            }
+
+            .plan-features {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .featured-logos {
+                gap: 30px;
+            }
+
+            .users-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .guarantee-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .reviews-section h2,
+            .users-section h2,
+            .faq-section h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .timer-value {
+                padding: 6px 10px;
+                font-size: 16px;
+                min-width: 40px;
+            }
+
+            .premium-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .plan-price {
+                font-size: 24px;
+            }
+
+            .review-card {
+                min-width: 260px;
+            }
+
+            .users-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .guarantee-badge-inner {
+                width: 100px;
+                height: 100px;
+            }
+
+            .guarantee-badge-inner span:nth-child(2) {
+                font-size: 28px;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideIn 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-lines"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-text">
+                        <h2>Hurry Up!</h2>
+                        <p>Limited Time Offer!</p>
+                    </div>
+                    <a href="#pricing" class="premium-btn">
+                        Get Premium <span class="discount-badge">70% OFF</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <div class="timer">
+                        <div class="timer-block">
+                            <div class="timer-value" id="hours">01</div>
+                            <div class="timer-label">Hr</div>
+                        </div>
+                        <span class="timer-separator">:</span>
+                        <div class="timer-block">
+                            <div class="timer-value" id="minutes">40</div>
+                            <div class="timer-label">Min</div>
+                        </div>
+                        <span class="timer-separator">:</span>
+                        <div class="timer-block">
+                            <div class="timer-value" id="seconds">56</div>
+                            <div class="timer-label">Sec</div>
+                        </div>
+                    </div>
+                    <button class="close-btn" aria-label="Close">&times;</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="main-section" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h1>Choose your plan</h1>
+                <p>Your payment is 100% anonymous!</p>
+            </div>
+
+            <div class="pricing-section">
+                <div class="pricing-left">
+                    <h3>Get <span>Exclusive</span><br>Discount Only Today!</h3>
+
+                    <div class="token-toggle" id="tokenToggle">
+                        <div class="toggle-switch active" id="toggleSwitch"></div>
+                        <span class="toggle-text">Get 100 Tokens every month</span>
+                    </div>
+
+                    <div class="pricing-plans">
+                        <div class="plan-card" data-plan="1month">
+                            <div class="plan-left">
+                                <div class="plan-radio"></div>
+                                <div class="plan-info">
+                                    <h4>1 month</h4>
+                                    <span class="discount">61% OFF</span>
+                                    <span class="original-price">19.99 USD</span>
+                                </div>
+                            </div>
+                            <div class="plan-right">
+                                <div class="plan-price">0.66 <span>USD</span></div>
+                                <div class="plan-period">per day</div>
+                            </div>
+                        </div>
+
+                        <div class="plan-card selected popular" data-plan="12months">
+                            <div class="plan-left">
+                                <div class="plan-radio"></div>
+                                <div class="plan-info">
+                                    <h4>12 months</h4>
+                                    <span class="discount">80% OFF</span>
+                                    <span class="original-price">119.99 USD</span>
+                                </div>
+                            </div>
+                            <div class="plan-right">
+                                <div class="plan-price">0.33 <span>USD</span></div>
+                                <div class="plan-period">per day</div>
+                            </div>
+                            <div class="popular-badge">MOST POPULAR</div>
+                        </div>
+
+                        <div class="plan-card" data-plan="3months">
+                            <div class="plan-left">
+                                <div class="plan-radio"></div>
+                                <div class="plan-info">
+                                    <h4>3 months</h4>
+                                    <span class="discount">55% OFF</span>
+                                    <span class="original-price">44.99 USD</span>
+                                </div>
+                            </div>
+                            <div class="plan-right">
+                                <div class="plan-price">0.49 <span>USD</span></div>
+                                <div class="plan-period">per day</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="plan-features">
+                        <div class="plan-feature">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <span>No commitment. Cancel anytime</span>
+                        </div>
+                        <div class="plan-feature">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            <span>30-Day Money-back Guaranteed</span>
+                        </div>
+                    </div>
+
+                    <button class="continue-btn" id="continueBtn">Continue</button>
+
+                    <p class="terms">
+                        By continuing, I confirm that I am at least 18 years old and that I have read and agree to the introductory price disclosure. My subscription will automatically renew at the full price of 29.99 USD per 1 year and my payment method will be charged accordingly unless I cancel. I also agree to receive a subscription confirmation only if I'll be able to activate via email. I acknowledge that I will not consent to a payment using merchants that attempt to collect charges or data without my knowledge. <a href="#">Terms of Service</a>
+                    </p>
+
+                    <div class="payment-info">
+                        <p>Payment will be shown as SkyMedia Inc.</p>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <svg width="40" height="25" viewBox="0 0 40 25">
+                                    <circle cx="14" cy="12.5" r="10" fill="#EB001B"/>
+                                    <circle cx="26" cy="12.5" r="10" fill="#F79E1B"/>
+                                    <path d="M20 5.5a10 10 0 010 14 10 10 0 000-14z" fill="#FF5F00"/>
+                                </svg>
+                            </div>
+                            <div class="payment-method">
+                                <svg width="40" height="25" viewBox="0 0 40 25">
+                                    <text x="5" y="17" font-size="12" font-weight="bold" fill="#1A1F71">VISA</text>
+                                </svg>
+                            </div>
+                            <div class="payment-method">
+                                <svg width="40" height="25" viewBox="0 0 40 25">
+                                    <circle cx="14" cy="12.5" r="8" fill="#ED0006"/>
+                                    <circle cx="26" cy="12.5" r="8" fill="#0099DF"/>
+                                </svg>
+                            </div>
+                            <div class="payment-method amex">
+                                <svg width="40" height="25" viewBox="0 0 40 25">
+                                    <text x="5" y="15" font-size="8" font-weight="bold" fill="white">AMEX</text>
+                                </svg>
+                            </div>
+                            <div class="payment-method">
+                                <svg width="50" height="25" viewBox="0 0 50 25">
+                                    <text x="3" y="16" font-size="9" font-weight="bold" fill="#FF6000">DISCOVER</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-benefits">
+                    <h3>Premium Benefits</h3>
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Free messages</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Generate photos</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Get 100 tokens every month</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Unlock chat photos</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Create your own AI Characters</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Fast response</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>New features priority use</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>Content privacy</span>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>And much more!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Featured Section -->
+    <section class="featured-section">
+        <div class="container">
+            <h2>As Featured In</h2>
+            <div class="featured-logos">
+                <div class="featured-logo">TechCrunch</div>
+                <div class="featured-logo">Forbes</div>
+                <div class="featured-logo">WSJ</div>
+                <div class="featured-logo">NEW YORK POST</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="container">
+            <h2>Over <span>300k</span> 5-star reviews</h2>
+            <div class="reviews-slider" id="reviewsSlider">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="William M." class="review-avatar">
+                        <div>
+                            <div class="review-name">William M.</div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">Photos of the girls are super realistic, like them a lot</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" alt="Michael N." class="review-avatar">
+                        <div>
+                            <div class="review-name">Michael N.</div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">The biggest choice of customization options among all alternatives</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="David R." class="review-avatar">
+                        <div>
+                            <div class="review-name">David R.</div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">I didn't expect how I spend my time talking to these girls</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=face" alt="James K." class="review-avatar">
+                        <div>
+                            <div class="review-name">James K.</div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">Amazing AI technology, feels like real conversations every time</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&h=100&fit=crop&crop=face" alt="Robert S." class="review-avatar">
+                        <div>
+                            <div class="review-name">Robert S.</div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="review-text">Best premium features I've seen in any similar platform</p>
+                </div>
+            </div>
+            <div class="slider-dots">
+                <div class="slider-dot active"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Users Section -->
+    <section class="users-section">
+        <div class="container">
+            <h2>Featured by users</h2>
+            <div class="users-grid">
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=400&fit=crop&crop=face" alt="Veronika Krizova">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Veronika Krizova</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=400&fit=crop&crop=face" alt="Isla Morgan">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★☆</div>
+                        <div class="user-name">Isla Morgan</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=400&fit=crop&crop=face" alt="Hana Yamada">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Hana Yamada</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=400&fit=crop&crop=face" alt="Olivia Fox">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Olivia Fox</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=400&fit=crop&crop=face" alt="Yuki Nakamura">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★☆</div>
+                        <div class="user-name">Yuki Nakamura</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&h=400&fit=crop&crop=face" alt="Annette Boucher">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Annette Boucher</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=300&h=400&fit=crop&crop=face" alt="Elena Vasquez">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★☆</div>
+                        <div class="user-name">Elena Vasquez</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&h=400&fit=crop&crop=face" alt="Anika Raffaela">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Anika Raffaela</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=400&fit=crop&crop=face" alt="Grace Wilson">
+                    <div class="user-card-overlay">
+                        <div class="user-stars">★★★★★</div>
+                        <div class="user-name">Grace Wilson</div>
+                        <div class="user-verified">Verified ✓</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What is an AI companion and how does it work?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>An AI companion is an advanced artificial intelligence designed to engage in meaningful conversations, provide emotional support, and adapt to your personality over time. It uses natural language processing to understand and respond to you naturally.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I customize the appearance and personality of the AI companion?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! You can fully customize your AI companion's appearance, personality traits, interests, and communication style to create your perfect match.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How realistic is the AI companion?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Our AI companions use state-of-the-art technology to provide incredibly realistic interactions. They remember past conversations, learn your preferences, and respond with emotional intelligence.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I chat with an AI companion 24/7?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Absolutely! Your AI companion is available around the clock, 24 hours a day, 7 days a week. They're always ready to chat whenever you need them.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I create multiple AI companions?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, with a premium subscription you can create and interact with multiple AI companions, each with their own unique personality and appearance.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is it safe to chat with an AI companion?</span>
+                            <div class="faq-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Your privacy and security are our top priorities. All conversations are encrypted, and your personal data is never shared with third parties. We maintain strict content privacy standards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-image">
+                    <img src="https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=400&h=600&fit=crop" alt="AI Companion">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guarantee Section -->
+    <section class="guarantee-section">
+        <div class="container">
+            <div class="guarantee-content">
+                <div class="guarantee-badge">
+                    <div class="guarantee-badge-inner">
+                        <span>MONEY BACK</span>
+                        <span>100%</span>
+                        <span>GUARANTEED</span>
+                    </div>
+                </div>
+                <div class="guarantee-text">
+                    <h3>Money Back Guarantee</h3>
+                    <p>We're confident that our premium experience will exceed your expectations, providing you with unique value and satisfaction. However, if for any reason you're not fully satisfied, we could propose you an option to apply for the refund to ensure your peace of mind. Enjoy the freedom to explore everything we offer, completely risk-free—because your satisfaction is, and always will be, our top priority.</p>
+                    <button class="safe-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                        Pay safe & secure
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI Companion. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Timer functionality
+        function initTimer() {
+            let totalSeconds = 1 * 3600 + 40 * 60 + 56; // 1h 40m 56s
+
+            function updateTimer() {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                } else {
+                    // Reset timer when it reaches 0
+                    totalSeconds = 1 * 3600 + 40 * 60 + 56;
+                }
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // Token toggle functionality
+        function initTokenToggle() {
+            const toggle = document.getElementById('tokenToggle');
+            const toggleSwitch = document.getElementById('toggleSwitch');
+
+            toggle.addEventListener('click', () => {
+                toggleSwitch.classList.toggle('active');
+            });
+        }
+
+        // Plan selection functionality
+        function initPlanSelection() {
+            const planCards = document.querySelectorAll('.plan-card');
+
+            planCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    planCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                });
+            });
+        }
+
+        // FAQ accordion functionality
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close all other items
+                    faqItems.forEach(i => i.classList.remove('active'));
+
+                    // Toggle current item
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Reviews slider functionality
+        function initReviewsSlider() {
+            const slider = document.getElementById('reviewsSlider');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlider();
+                });
+            });
+
+            function updateSlider() {
+                const cardWidth = slider.querySelector('.review-card').offsetWidth + 20; // card width + gap
+                slider.scrollTo({
+                    left: currentSlide * cardWidth,
+                    behavior: 'smooth'
+                });
+
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+
+            // Auto-scroll
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % dots.length;
+                updateSlider();
+            }, 5000);
+
+            // Update dots on manual scroll
+            slider.addEventListener('scroll', () => {
+                const cardWidth = slider.querySelector('.review-card').offsetWidth + 20;
+                const newSlide = Math.round(slider.scrollLeft / cardWidth);
+                if (newSlide !== currentSlide) {
+                    currentSlide = newSlide;
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentSlide);
+                    });
+                }
+            });
+        }
+
+        // Continue button functionality
+        function initContinueButton() {
+            const continueBtn = document.getElementById('continueBtn');
+
+            continueBtn.addEventListener('click', () => {
+                const selectedPlan = document.querySelector('.plan-card.selected');
+                const planName = selectedPlan.dataset.plan;
+
+                // Add ripple effect
+                continueBtn.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    continueBtn.style.transform = 'scale(1)';
+                }, 100);
+
+                // Show alert (in real implementation, this would redirect to payment)
+                alert(`You selected the ${planName} plan. Redirecting to payment...`);
+            });
+        }
+
+        // Close button functionality
+        function initCloseButton() {
+            const closeBtn = document.querySelector('.close-btn');
+            const header = document.querySelector('.header');
+
+            closeBtn.addEventListener('click', () => {
+                header.style.transform = 'translateY(-100%)';
+                header.style.opacity = '0';
+                setTimeout(() => {
+                    header.style.display = 'none';
+                }, 300);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Intersection Observer for animations
+        function initAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.review-card, .user-card, .faq-item, .benefit-item').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize all functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimer();
+            initTokenToggle();
+            initPlanSelection();
+            initFAQ();
+            initReviewsSlider();
+            initContinueButton();
+            initCloseButton();
+            initSmoothScroll();
+            initAnimations();
+        });
+    </script>
+</body>
+</html>
